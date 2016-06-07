@@ -36,7 +36,7 @@ while [ "$1" != "" ]; do
     case $1 in
     -i | --interval        ) shift;_interval=$1;;
 		-c | --clear           ) _c=1;;
-		-l | --limit           ) shift;_l=$1;;
+		-l | --limit           ) shift;_limit=$1;;
 		-5 | --php56           ) _php=/usr/bin/php5.6;;
 		-7 | --php7						 ) _php=/usr/bin/php7.0;;
     *                      ) addparam $1;;
@@ -49,7 +49,9 @@ if [ "$_script" == "" ]; then
 	exit 1;
 fi
 
-for ((i=1; i<_limit; i++));
+echo "Limit : $_limit"
+
+for ((i=0; i<_limit; i++));
 do
 
 	if [ $_c -eq 1 ]; then
@@ -72,3 +74,6 @@ do
 
 	sleep $_interval
 done
+echo
+echo "Test Finished"
+echo
