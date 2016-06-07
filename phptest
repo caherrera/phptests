@@ -1,11 +1,28 @@
 #!/bin/bash
 
-_sleep=3
+_interval=3
 _php=/usr/bin/php5.6
 _c=0
 _script=
 _limit=999
-_params=
+_params=""
+
+usage() {
+	echo -n "Usage : "
+	echo -n $(basename $0)
+	echo -n " [-i | --interval]"
+	echo -n " [-c | --clear   ]"
+	echo -n " [-l | --limit   ]"
+	echo -n " [-5 | --php56   ]"
+	echo -n " [-7 | --php7    ]"
+  echo -n " script param1 param2 ... paramN "
+	echo
+	echo
+
+
+
+
+}
 
 addparam() {
 	if [ "$_script" == "" ]; then
@@ -17,7 +34,7 @@ addparam() {
 
 while [ "$1" != "" ]; do
     case $1 in
-    -s | --sleep           ) shift;_sleep=$1;;
+    -i | --interval        ) shift;_interval=$1;;
 		-c | --clear           ) _c=1;;
 		-l | --limit           ) shift;_l=$1;;
 		-5 | --php56           ) _php=/usr/bin/php5.6;;
@@ -27,6 +44,10 @@ while [ "$1" != "" ]; do
     shift
 done
 
+if [ "$_script" == "" ]; then
+	usage
+	exit 1;
+fi
 
 for ((i=1; i<_limit; i++));
 do
@@ -40,12 +61,14 @@ do
 	fi
 
   echo "Try #" $i;
-	$_php -f $_script -- $params
+	_command="$_php -f $_script -- $_params";
+	echo $_command;
+	$_command;
 	if [ $_c -eq 0 ]; then
 		echo "-------------------------------------------------------------------------------";
 		echo;
 		echo;
 	fi
 
-	sleep $_sleep
+	sleep $_interval
 done
